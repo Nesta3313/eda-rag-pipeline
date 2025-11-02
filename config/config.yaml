@@ -1,0 +1,29 @@
+paths:
+  raw_data_dir: "data/raw"
+  artifacts_dir: "data/artifacts"
+  vector_dir: "storage/vectors"
+
+eda:
+  profile_html: true
+  max_rows_preview: 200
+  correlation_method: "spearman"
+  leakage_check: true
+
+chunking:
+  chunk_size: 800
+  chunk_overlap: 180
+  include_metadata: true
+
+embeddings:
+  provider: "openai"
+  model: "text-embedding-3-small"
+
+llm:
+  provider: "openai"
+  model: "gpt-4o-mini"
+  max_tokens: 800
+
+vector_store:
+  type: "faiss"
+
+

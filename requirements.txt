@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+ydata-profiling
+langchain
+faiss-cpu
+pydantic
+python-dotenv
+PyYAML
+tqdm
