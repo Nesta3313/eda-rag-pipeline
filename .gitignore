@@ -1,0 +1,53 @@
+# --- Python build & caches ---
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+.mypy_cache/
+.pytest_cache/
+.coverage*
+htmlcov/
+
+# --- Virtual envs ---
+.venv/
+venv/
+
+# --- Secrets / config ---
+config/.env
+config/.env.*
+*.key
+*.pem
+
+# --- OS / IDE junk ---
+.DS_Store
+Thumbs.db
+.idea/
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- Data ---
+data/raw/**
+!data/raw/.gitkeep  # keep folder only
+
+# --- Artifacts ---
+data/artifacts/**/*.html
+data/artifacts/**/*.pdf
+data/artifacts/**/*.png
+data/artifacts/**/*.jpg
+# keep JSON/Markdown summaries for RAG
+!data/artifacts/**/*.json
+!data/artifacts/**/*.md
+
+# --- Vector store indexes ---
+storage/vectors/**
+!storage/vectors/.gitkeep
+
+# --- Logs & caches ---
+logs/
+*.log
+.cache/
