@@ -5,6 +5,7 @@ paths:
 
 eda:
   profile_html: true
+  profile_sample_rows: 5000
   max_rows_preview: 200
   correlation_method: "spearman"
   leakage_check: true

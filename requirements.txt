@@ -9,3 +9,4 @@ python-dotenv
 PyYAML
 tqdm
 openai>=1.42.0
+streamlit

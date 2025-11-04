@@ -33,9 +33,10 @@ from .validators import (
 class EDAConfig:
     raw_data_dir: str
     artifacts_dir: str
+    profile_sample_rows: 5000
+    max_rows_preview: int = 200
     correlation_method: str = "spearman"
     profile_html: bool = False
-    max_rows_preview: int = 200
     leakage_check: bool = True
 
 def load_config(path: str = "config/config.yaml") -> EDAConfig:
@@ -52,6 +53,7 @@ def load_config(path: str = "config/config.yaml") -> EDAConfig:
         profile_html=eda.get("profile_html", True),
         max_rows_preview=eda.get("max_rows_preview", 200),
         leakage_check=eda.get("leakage_check", True),
+        profile_sample_rows=eda.get("profile_sample_rows", 5000)
     )
 
 # ---------------------------
@@ -292,10 +294,40 @@ def run_eda(csv_path: str, target: Optional[str] = None, config_path: str = "con
     # Optional heavy HTML profile
     if cfg.profile_html and HAS_PROFILING:
         try:
-            prof = ProfileReport(df, title=f"Profile: {dataset_name}", explorative=True, minimal=True)
+            prof = ProfileReport(df, title=f"Profile: {dataset_name}", explorative=True, minimal=False)
             prof.to_file(out_dir / "profile.html")
         except Exception as e:
             warnings.append(f"Profile generation failed: {e}")
+
+    # Optional heavy HTML profile
+    if cfg.profile_html and HAS_PROFILING:
+        try:
+            # (Optional) sample to keep profiles snappy on big CSVs
+            df_profile = df
+            if getattr(cfg, "profile_sample_rows", None):
+                n = min(cfg.profile_sample_rows, len(df))
+                df_profile = df.sample(n=n, random_state=0)
+
+            prof = ProfileReport(
+                df_profile,
+                title=f"Profile: {dataset_name}",
+                explorative=True,  # unlocks more visuals
+                minimal=False,  # turn OFF minimal mode to show heatmaps, interactions, etc.
+                correlations={
+                    "pearson": {"calculate": True},
+                    "spearman": {"calculate": True},
+                    "kendall": {"calculate": True},
+                },
+            )
+            prof.to_file(out_dir / "profile.html")
+            print(f"[EDA] Wrote profile.html to {out_dir}")
+        except ModuleNotFoundError:
+            msg = "ydata-profiling not installed; skipping profile.html"
+            warnings.append(msg)
+            print(f"[EDA] {msg}")
+        except Exception as e:
+            warnings.append(f"Profile generation failed: {e}")
+            print(f"[EDA] Profile generation failed: {e}")
 
     return summary
 

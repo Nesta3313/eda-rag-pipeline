@@ -33,6 +33,10 @@ Thumbs.db
 # --- Data ---
 data/raw/**
 !data/raw/.gitkeep  # keep folder only
+# User uploads (persist server-side, not in git)
+data/uploads/**
+!data/uploads/.gitkeep
+
 
 # --- Artifacts ---
 data/artifacts/**/*.html
